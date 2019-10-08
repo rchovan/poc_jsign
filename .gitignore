@@ -1,0 +1,5 @@
+launch4j.log
+build\*
+.gradle\*
+.idea\*
+out\*

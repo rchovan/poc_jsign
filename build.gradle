@@ -1,0 +1,74 @@
+buildscript {
+    dependencies {
+        classpath 'net.jsign:jsign-gradle-plugin:2.1'
+        classpath 'edu.sc.seis.gradle:launch4j:2.4.6'
+    }
+}
+
+plugins {
+    id 'java'
+    id 'application'
+}
+
+repositories {
+    jcenter()
+}
+
+apply plugin: 'java'
+apply plugin: 'net.jsign'
+apply plugin: 'edu.sc.seis.launch4j'
+
+dependencies {
+    implementation 'org.xerial:sqlite-jdbc:3.7.2'
+}
+
+mainClassName = 'Main'
+
+sourceSets {
+    main {
+        java {
+            srcDir 'src'
+        }
+    }
+
+    test {
+        java {
+            srcDir 'test'
+        }
+    }
+}
+
+jar {
+    from('src') {
+        include 'res/*'
+    }
+
+    manifest {
+        attributes 'Main-Class': 'Main'
+    }
+}
+
+launch4j {
+    mainClassName = 'Main'
+    headerType = 'console'
+    outfile = "hello_world.exe"
+    productName = 'hello_world'
+    jvmOptions = ['-Dfile.encoding=UTF-8']
+    copyConfigurable = ['lib/sqlite-jdbc-3.7.2.jar']
+    jar  = "${projectDir}/build/libs/HelloWorld.jar"
+
+}
+
+task sign {
+    signexe(file      : 'build/launch4j/hello_world.exe',
+            name      : 'hello_world',
+            url       : 'https://company.com/product',
+            keystore  : 'helloworld.pfx',
+            storetype:  'PKCS12',
+            alias     : 'helloworld',
+            storepass : 'storepass',
+            keypass : 'keypass',
+            tsaurl    : 'http://timestamp.comodoca.com/authenticode')
+}
+
+build.dependsOn(createExe)
