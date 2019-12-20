@@ -55,15 +55,16 @@ launch4j {
 }
 
 task sign {
-    signexe(file      : 'build/launch4j/hello_world.exe',
-            name      : 'hello_world',
-            url       : 'https://company.com/product',
-            keystore  : 'helloworld.pfx',
-            storetype:  'PKCS12',
-            alias     : 'helloworld',
-            storepass : 'storepass',
-            keypass : 'keypass',
-            tsaurl    : 'http://timestamp.comodoca.com/authenticode')
+    doLast {
+        signexe(file      : 'build/launch4j/hello_world.exe',
+                name      : 'hello_world',
+                url       : 'https://company.com/product',
+                keystore  : 'helloworld.pfx',
+                storetype : 'PKCS12',
+                alias     : 'helloworld',
+                storepass : 'storepass',
+                keypass   : 'keypass',
+                tsaurl    : 'http://timestamp.comodoca.com/authenticode')
+    }
 }
-
 build.dependsOn(createExe)
