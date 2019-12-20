@@ -1,3 +1,4 @@
+
 buildscript {
     dependencies {
         classpath 'net.jsign:jsign-gradle-plugin:2.1'
@@ -56,6 +57,11 @@ launch4j {
 
 task sign {
     doLast {
+        println "task sign"
+        ConfigurableFileTree tree = fileTree(dir: 'build/launch4j')
+        tree.each {File file ->
+            println file
+        }
         signexe(file      : 'build/launch4j/hello_world.exe',
                 name      : 'hello_world',
                 url       : 'https://company.com/product',
@@ -67,4 +73,6 @@ task sign {
                 tsaurl    : 'http://timestamp.comodoca.com/authenticode')
     }
 }
+
+
 build.dependsOn(createExe)
